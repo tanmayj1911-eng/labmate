@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Mate — Your Companion in Lab</title>
+  <meta name="description" content="Learn electronics theory, understand components, explore circuits, run virtual experiments and get AI-powered help.">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <style>
+    /* Mobile drawer */
+    .mobile-menu-btn { display: none; padding: 0.4rem; color: var(--color-text); }
+    .mobile-drawer {
+      display: none; position: fixed; top: var(--header-h); left: 0; right: 0;
+      background: var(--color-bg-alt); border-bottom: 1px solid var(--color-border);
+      padding: 1rem; z-index: 99; flex-direction: column; gap: 0.25rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .mobile-drawer.open { display: flex; }
+    @media (max-width: 768px) {
+      .mobile-menu-btn { display: inline-flex; }
+    }
+    .footer {
+      border-top: 1px solid var(--color-border);
+      background: var(--color-bg-alt);
+      padding: 2rem 1.5rem;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Top Navigation -->
+    <header class="topnav">
+      <a href="#home" class="topnav-logo" onclick="event.preventDefault(); navigate('home')">
+        <div class="logo-icon">⚡</div>
+        <span>LAB MATE</span>
+      </a>
+
+      <nav class="topnav-nav" aria-label="Main Navigation">
+        <button class="topnav-link active" data-nav="home" onclick="navigate('home')">Home</button>
+        <button class="topnav-link" data-nav="learn" onclick="navigate('learn')">Learn</button>
+        <button class="topnav-link" data-nav="components" onclick="navigate('components')">Components</button>
+        <button class="topnav-link" data-nav="circuit-studio" onclick="navigate('circuit-studio')">Circuit Studio</button>
+        <button class="topnav-link" data-nav="sandbox" onclick="navigate('sandbox')">Sandbox</button>
+        <button class="topnav-link" data-nav="virtual-lab" onclick="navigate('virtual-lab')">Virtual Lab</button>
+        <button class="topnav-link" data-nav="projects" onclick="navigate('projects')">Projects</button>
+        <button class="topnav-link" data-nav="practice" onclick="navigate('practice')">Practice</button>
+      </nav>
+
+      <div class="topnav-actions">
+        <button class="btn btn-secondary btn-sm" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch Dark / Light Mode" aria-label="Toggle Dark or Light Mode">
+          ☀️
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="navigate('dashboard')" data-nav="dashboard">
+          Dashboard
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="navigate('ask-lab-mate')" data-nav="ask-lab-mate">
+          🤖 Ask AI
+        </button>
+        <button class="btn btn-secondary btn-sm" id="auth-nav-btn" onclick="openAuthModal()" style="border-color:var(--color-border-blue);">
+          🔑 Login
+        </button>
+        <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="document.getElementById('mobile-drawer').classList.toggle('open')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-drawer" class="mobile-drawer">
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('home'); this.parentElement.classList.remove('open')">🏠 Home</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('dashboard'); this.parentElement.classList.remove('open')">📊 Dashboard</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('learn'); this.parentElement.classList.remove('open')">📚 Learn</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('components'); this.parentElement.classList.remove('open')">🔧 Components</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('circuit-studio'); this.parentElement.classList.remove('open')">〰️ Circuit Studio</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('sandbox'); this.parentElement.classList.remove('open')">🧩 Sandbox</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('virtual-lab'); this.parentElement.classList.remove('open')">🔬 Virtual Lab</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('practice'); this.parentElement.classList.remove('open')">🎯 Practice</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('projects'); this.parentElement.classList.remove('open')">🚀 Projects</button>
+      <button class="topnav-link" style="text-align:left;" onclick="navigate('ask-lab-mate'); this.parentElement.classList.remove('open')">🤖 Ask AI</button>
+    </div>
+
+    <!-- Page Containers -->
+    <section id="page-home" class="page active"></section>
+    <section id="page-dashboard" class="page"></section>
+    <section id="page-learn" class="page"></section>
+    <section id="page-lesson" class="page"></section>
+    <section id="page-components" class="page"></section>
+    <section id="page-component" class="page"></section>
+    <section id="page-circuit-studio" class="page"></section>
+    <section id="page-sandbox" class="page"></section>
+    <section id="page-virtual-lab" class="page"></section>
+    <section id="page-experiment" class="page"></section>
+    <section id="page-ask-lab-mate" class="page"></section>
+    <section id="page-practice" class="page"></section>
+    <section id="page-projects" class="page"></section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container flex justify-between items-center flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+          <span style="font-size:1.1rem;">⚡</span>
+          <strong style="font-size:0.95rem;">LAB MATE</strong>
+          <span class="text-dim text-sm">· Your Companion in Lab</span>
+        </div>
+        <div class="text-dim text-xs">
+          Learn electronics. Understand circuits. Build with confidence.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/svg-parts.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/pages1.js"></script>
+  <script src="assets/js/pages2.js"></script>
+  <script src="assets/js/sandbox.js"></script>
+  <script>
+    // Initialize app on load
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      updateAuthUI();
+      navigate('home');
+    });
+
+    // Global Ctrl+K shortcut to jump to Dashboard search
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (State.currentPage !== 'dashboard') navigate('dashboard');
+        setTimeout(() => {
+          const inp = document.getElementById('global-search-input');
+          if (inp) inp.focus();
+        }, 50);
+      }
+    });
+  </script>
+</body>
+</html>
